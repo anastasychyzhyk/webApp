@@ -1,0 +1,60 @@
+{# templates/list/index.html.twig #} {% extends 'base.html.twig' %} {% block
+body %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card bg-light mb-3 mt-3">
+	    {{ form_start(form) }}
+        <div class="card-body">	
+			<button class="btn btn-primary" type="submit" name="delete">Delete</button>				
+			<button class="btn btn-primary" type="submit" name="block">Block</button>		
+			<button class="btn btn-primary" type="submit" name="unblock">Unblock</button>		
+		</div>
+        <div class="card-header">		  
+          {% if app.user != null %}
+          <table class="table">
+            <tr>
+			  <th>     
+			    <input type="checkbox" id="maincheckbox">
+				<script>
+				    var maincheckbox=document.querySelector('#maincheckbox');
+					var checkboxes=document.getElementsByName('checkbox[]');
+					maincheckbox.onclick=function(){						
+					for(var i=0; i<checkboxes.length;i++)
+					    checkboxes[i].checked=maincheckbox.checked;
+					}
+				</script>
+			  </th>
+              <th>ID</th>
+			  <th>Email</th>           
+			  <th>Name</th>
+			  <th>Registration date</th>			  
+			  <th>Last login date</th>			  
+			  <th>Status</th>
+            </tr>
+            {% for user in users %}
+            <tr>
+			  <td> <input type="checkbox" name="checkbox[]" value={{user.email}}> </td>
+              <td>{{ user.id }}</td>
+              <td>{{ user.email }}</td>			
+			  <td>{{ user.name }}</td>
+			  <td>{{ user.registrationDate }}</td>
+			  <td>{{ user.lastLoginDate }}</td>
+			  <td>{{ user.status }}</td>
+            </tr>
+            {% endfor %}
+          </table>
+          {% endif %}
+        </div>
+      </div>
+	  
+	    {{ form_end(form) }}
+      {% if app.user == null %}
+      <a href="{{ path('app_login') }}" class="btn btn-info">
+        You need to login to see the list >></a
+      >
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
