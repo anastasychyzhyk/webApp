@@ -27,5 +27,12 @@ services:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
 
+    session.handler.pdo.custom:
+        class: YourBundle\HttpFoundation\Session\Storage\Handler\UserIdPdoSessionHandler
+        public:    true
+        arguments:
+            - "mysql:host=%database_host%;dbname=%database_name%"
+            - { db_username: %database_user%, db_password: %database_password% }
+            - @security.token_storage
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
