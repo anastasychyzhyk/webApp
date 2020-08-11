@@ -25,7 +25,7 @@ class ListController extends AbstractController
      */
     public function index(Request $request)
     {		
-	 	if (($this->checkAndLogout($request)) return $this->redirectToRoute('app_login');		
+	 	if ($this->checkAndLogout($request)) return $this->redirectToRoute('app_login');		
         $form = $this->createForm(ListForm::class);
         $form->handleRequest($request);
        	if ($form->isSubmitted() && !empty($_POST['checkbox']) && $this->processRequestAndCheckLogout($request)) {
