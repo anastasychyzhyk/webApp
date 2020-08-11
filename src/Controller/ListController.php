@@ -64,7 +64,7 @@ class ListController extends AbstractController
 	   // if(!isset($_POST['unblock']) && ($email==$request->getSession()->get(Security::LAST_USERNAME, ''))) {
 		//	$this->container->get('security.token_storage')->setToken(null); 
           //  return true;			
-		}
+		
 		else return false;
 	}	
 }
