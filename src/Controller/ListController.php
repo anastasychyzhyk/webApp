@@ -57,6 +57,7 @@ class ListController extends AbstractController
 	public function checkAndLogout(Request $request)
 	{	
         if(!$this->userRepository->findOneBy(['email' => $request->getSession()->get(Security::LAST_USERNAME, '')])->IsActive()) {
+			echo $request->getSession()->get(Security::LAST_USERNAME, '');
 		    $this->container->get('security.token_storage')->setToken(null);
 		    return true;
 	    }	
