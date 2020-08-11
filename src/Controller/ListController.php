@@ -24,10 +24,11 @@ class ListController extends AbstractController
      * @Route("/list", name="list")
      */
     public function index(Request $request)
-    {	
+    {		
         $form = $this->createForm(ListForm::class);
         $form->handleRequest($request);
-       	if ($form->isSubmitted() && !empty($_POST['checkbox']) && $this->processRequest($request)) {
+       	if (($this->checkAndLogout($request)) ||
+		($form->isSubmitted() && !empty($_POST['checkbox']) && $this->processRequestAndCheckLogout($request))) {
 			return $this->redirectToRoute('app_login');										 
 		}
 		else {
@@ -35,12 +36,12 @@ class ListController extends AbstractController
 		}
     }
 	
-	public function processRequest(Request $request)
+	public function processRequestAndCheckLogout(Request $request)
 	{		
 		$needRedirectToLogin=false;
 		foreach($_POST['checkbox'] as $email) {
 		    $this->checkRequestTypeAndDo($email);
-            $needRedirectToLogin = $needRedirectToLogin || $this->checkAndLogout($request, $email);
+            $needRedirectToLogin = $needRedirectToLogin || $this->checkAndLogout($request);
 		}				
 		return $needRedirectToLogin;
 	}
@@ -53,13 +54,16 @@ class ListController extends AbstractController
 		else if(isset($_POST['block'])) $this->userRepository->blockUser($user); 					
 	}
 	
-	public function checkAndLogout(Request $request, string $email)
-	{		
-	    if(!isset($_POST['unblock']) && ($email==$request->getSession()->get(Security::LAST_USERNAME, ''))) {
-			$this->container->get('security.token_storage')->setToken(null);
-	
- 
-            return true;			
+	public function checkAndLogout(Request $request)
+	{	
+        if(!$this->userRepository->findOneBy(['email' => $request->getSession()->get(Security::LAST_USERNAME, '')])->IsActive()) {
+		    $this->container->get('security.token_storage')->setToken(null);
+		    return true;
+	    }	
+        	
+	   // if(!isset($_POST['unblock']) && ($email==$request->getSession()->get(Security::LAST_USERNAME, ''))) {
+		//	$this->container->get('security.token_storage')->setToken(null); 
+          //  return true;			
 		}
 		else return false;
 	}	
