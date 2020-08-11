@@ -57,8 +57,7 @@ class ListController extends AbstractController
 	{		
 	    if(!isset($_POST['unblock']) && ($email==$request->getSession()->get(Security::LAST_USERNAME, ''))) {
 			$this->container->get('security.token_storage')->setToken(null);
-			    $this->get('session.handler.pdo.custom')->destroy($sessionId, $this->getUser()->getId());
-   
+	
  
             return true;			
 		}
