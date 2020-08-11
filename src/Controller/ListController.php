@@ -24,12 +24,10 @@ class ListController extends AbstractController
      * @Route("/list", name="list")
      */
     public function index(Request $request)
-    {		
-	 	//if (
-		//$this->checkAndLogout($request);//) return $this->redirectToRoute('app_login');		
+    {
+  	    if ($this->checkAndLogout($request)) return $this->redirectToRoute('app_login');				
         $form = $this->createForm(ListForm::class);
         $form->handleRequest($request);
-       	if ($this->checkAndLogout($request)) return $this->redirectToRoute('app_login');		
         if ($form->isSubmitted() && !empty($_POST['checkbox']) && $this->processRequestAndCheckLogout($request)) {
 			return $this->redirectToRoute('app_login');										 
 		}
@@ -63,11 +61,6 @@ class ListController extends AbstractController
 		    $this->container->get('security.token_storage')->setToken(null);
 		    return true;
 	    }	
-        	
-	   // if(!isset($_POST['unblock']) && ($email==$request->getSession()->get(Security::LAST_USERNAME, ''))) {
-		//	$this->container->get('security.token_storage')->setToken(null); 
-          //  return true;			
-		
 		else return false;
 	}	
 }
